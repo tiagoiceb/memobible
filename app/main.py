@@ -529,3 +529,4 @@ def marcar_memorizado(verse_id: int, request: Request, db: Session = Depends(get
     db.commit()
 
     return RedirectResponse(url=f"/versiculo/{verse_id}", status_code=303)
+    

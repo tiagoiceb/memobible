@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/images/favicon.png">
+
+    <style>
+        .verse-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .verse-box {
+            background: white;
+            padding: 40px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+        }
+
+        .verse-reference {
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .verse-text {
+            font-size: 22px;
+            line-height: 1.8;
+        }
+
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #eeeeee;
+            color: #222;
+        }
+
+        .hidden-word {
+            background: #dcdcdc;
+            color: transparent;
+            border-radius: 4px;
+            padding: 2px 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="verse-container">
+        <p><a href="/trilha/{{ verse.track.id }}">← Voltar à trilha</a></p>
+
+        <div class="verse-box">
+            <div class="verse-reference">
+                {{ verse.reference }}
+            </div>
+
+            <div class="verse-text" id="verseText">
+                {{ verse.text }}
+            </div>
+
+            <p style="margin-top: 24px;">
+                <strong>Status:</strong>
+                {% if progress.memorized %}
+                    Memorizado
+                {% else %}
+                    Em andamento
+                {% endif %}
+            </p>
+
+            <div class="controls">
+                <button type="button" class="btn btn-secondary" onclick="hideWords()">
+                    Esconder palavras
+                </button>
+
+                {% if not progress.memorized %}
+                <form method="post" action="/versiculo/{{ verse.id }}/memorizar">
+                    <button type="submit" class="btn btn-primary">
+                        Marcar como memorizado
+                    </button>
+                </form>
+                {% else %}
+                <span class="btn btn-primary" style="opacity: 0.8; cursor: default;">
+                    Versículo memorizado
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function hideWords() {
+            const verse = document.getElementById("verseText");
+            const words = verse.innerText.split(" ");
+
+            const hidden = words.map(function(word) {
+                if (Math.random() < 0.35) {
+                    return '<span class="hidden-word">' + word + '</span>';
+                }
+                return word;
+            });
+
+            verse.innerHTML = hidden.join(" ");
+        }
+    </script>
+
+</body>
+</html>

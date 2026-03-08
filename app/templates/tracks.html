@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Trilhas • MemoLab</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+<style>
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f6fb;
+    color:#1f2937;
+    margin:0;
+}
+
+/* HEADER */
+
+.topbar{
+    background:white;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.topbar-inner{
+    max-width:1100px;
+    margin:auto;
+    padding:18px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo{
+    width:34px;
+}
+
+.brand-name{
+    font-size:18px;
+    font-weight:700;
+}
+
+.home-button{
+    background:#4da3ff;
+    padding:8px 16px;
+    border-radius:8px;
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* CONTAINER */
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:40px;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    opacity:0.7;
+    margin-bottom:40px;
+}
+
+/* GRID */
+
+.tracks-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:22px;
+}
+
+/* CARD */
+
+.track{
+    background:white;
+    padding:22px;
+    border-radius:16px;
+    box-shadow:0 2px 12px rgba(0,0,0,0.05);
+    transition:.2s;
+}
+
+.track:hover{
+    transform:translateY(-3px);
+}
+
+.track h3{
+    margin-top:0;
+}
+
+.track p{
+    color:#475569;
+}
+
+/* SETECEB */
+
+.track-seteceb{
+    background:#6b0f1a;
+    border:2px solid #6b0f1a;
+}
+
+.track-seteceb h3,
+.track-seteceb p{
+    color:white;
+}
+
+.track-seteceb a{
+    color:white;
+}
+
+/* PROGRESS */
+
+.progress{
+    background:#e5e7eb;
+    height:8px;
+    border-radius:999px;
+    margin:12px 0;
+}
+
+.progress-bar{
+    background:#4da3ff;
+    height:8px;
+    border-radius:999px;
+}
+
+/* LINK */
+
+a{
+    color:#2a6df4;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* FOOTER */
+
+.footer{
+    margin-top:60px;
+    background:white;
+    border-top:1px solid #e5e7eb;
+}
+
+.footer-inner{
+    max-width:1100px;
+    margin:auto;
+    padding:30px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.footer-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.footer-copy{
+    color:#64748b;
+    font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+<div class="topbar-inner">
+
+<div class="brand">
+
+<img src="/static/images/logo_icon.png" class="logo">
+
+<span class="brand-name">MemoLab</span>
+
+</div>
+
+<a href="/" class="home-button">
+Voltar ao início
+</a>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<h1>Trilhas de Memorização</h1>
+
+<div class="subtitle">
+Escolha uma trilha e comece a memorizar a Palavra de Deus
+</div>
+
+<div class="tracks-grid">
+
+{% for track in tracks %}
+
+<div class="track {% if track.title == 'Seteceb 1º 2026' %}track-seteceb{% endif %}">
+
+<h3>{{ track.title }}</h3>
+
+<p>{{ track.description }}</p>
+
+<a href="/trilha/{{track.id}}">
+Abrir trilha →
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+<footer class="footer">
+
+<div class="footer-inner">
+
+<div class="footer-brand">
+
+<img src="/static/images/logo_icon.png" class="logo">
+
+<span class="brand-name">MemoLab</span>
+
+</div>
+
+<div class="footer-copy">
+
+© 2026 MemoLab — Memorização bíblica inteligente
+
+</div>
+
+</div>
+
+</footer>
+
+</body>
+
+</html>

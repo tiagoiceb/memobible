@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/images/favicon.png">
+</head>
+<body>
+    <main class="page">
+        <section class="section" style="max-width: 640px; margin: 80px auto;">
+            <div class="section-header">
+                <h3>Criar conta</h3>
+                <p>Comece sua jornada de memorização bíblica.</p>
+            </div>
+
+            <div class="theme-card">
+                {% if erro %}
+                <p style="color: #c62828; margin-bottom: 16px;"><strong>{{ erro }}</strong></p>
+                {% endif %}
+
+                <form method="post" action="/register" class="auth-form">
+                    <input type="text" name="name" placeholder="Seu nome" required>
+                    <input type="email" name="email" placeholder="Seu e-mail" required>
+                    <input type="password" name="password" placeholder="Sua senha" required>
+                    <button type="submit" class="primary-button">Criar conta</button>
+                </form>
+
+                <p style="margin-top: 18px;">
+                    Já tem conta? <a href="/login">Entrar</a>
+                </p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

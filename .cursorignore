@@ -1,0 +1,10 @@
+.venv
+__pycache__
+*.db
+*.sqlite
+*.sqlite3
+.git
+node_modules
+dist
+build
+.env

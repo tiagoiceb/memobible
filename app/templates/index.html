@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/images/favicon.png">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="topbar-content">
+
+            <div class="nav-left">
+                <div class="brand">
+                    <img src="/static/images/logo_icon.png" alt="MemoLab" class="logo-icon">
+                    <div class="brand-text">
+                        <span class="brand-name">MemoLab</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="nav-center">
+                <a href="#funcionalidades">Funcionalidades</a>
+                <a href="#como-funciona">Como Funciona</a>
+                <a href="#planos">Planos</a>
+                <a href="#sobre">Sobre</a>
+                <a href="/trilhas">Trilhas</a>
+            </nav>
+
+            <div class="nav-right">
+                <button class="icon-button" aria-label="Idioma">🌐</button>
+                <button class="icon-button" aria-label="Tema">☼</button>
+
+                {% if current_user %}
+                <span class="login-link">Olá, {{ current_user.name }}</span>
+                <a href="/dashboard" class="login-link">Minha Jornada</a>
+                <a href="/logout" class="top-button">Sair</a>
+                {% else %}
+                <a href="/login" class="login-link">Entrar</a>
+                <a href="/register" class="top-button">Começar Agora</a>
+                {% endif %}
+            </div>
+
+        </div>
+    </header>
+
+    <main class="page">
+
+        <section class="hero hero-centered">
+            <div class="hero-badge">Memorização bíblica inteligente</div>
+
+            <h1 class="hero-main-title">
+                Memorização Bíblica
+                <span class="gradient-text">Profunda e Inteligente</span>
+            </h1>
+
+            <p class="hero-main-subtitle">
+                Memorize a Palavra de Deus com revisão inteligente, trilhas temáticas,
+                progresso contínuo e recursos práticos para devoção, discipulado e vida.
+            </p>
+
+            <div class="hero-actions hero-actions-centered">
+                {% if current_user %}
+                <a href="/dashboard" class="primary-button">Ir para Minha Jornada</a>
+                {% else %}
+                <a href="/register" class="primary-button">Comece a Memorizar</a>
+                {% endif %}
+                <a href="/trilhas" class="secondary-button">Explorar Trilhas</a>
+            </div>
+
+            <div class="scroll-indicator">⌄</div>
+        </section>
+
+        <section class="section metrics-strip">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">9</span>
+                    <span class="stat-label">versículos essenciais</span>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-number">{{ tracks|length }}</span>
+                    <span class="stat-label">trilhas temáticas</span>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">modos de revisão</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="funcionalidades">
+            <div class="section-header">
+                <h3>Recursos principais</h3>
+                <p>Mais do que decorar textos: memorizar, revisar, entender e viver.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="theme-card">
+                    <h4>Planos de Memorização</h4>
+                    <p>Trilhas organizadas por temas bíblicos centrais e por níveis de dificuldade.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Revisão Diária</h4>
+                    <p>O sistema mostra o que revisar no momento certo para reforçar a fixação.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Áudio e Repetição</h4>
+                    <p>Leia, ouça e recite os versículos para consolidar a memória.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Quizzes e Testes</h4>
+                    <p>Complete palavras, referências e sequências para verificar retenção.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Mapas e Resumos</h4>
+                    <p>Visualizações simples para organizar os temas e facilitar a revisão.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Aplicação Prática</h4>
+                    <p>Leve a Palavra para oração, discipulado, aconselhamento e evangelismo.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="como-funciona">
+            <div class="section-header">
+                <h3>Como funciona</h3>
+                <p>Uma jornada simples em quatro passos.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="theme-card">
+                    <h4>1. Escolha uma trilha</h4>
+                    <p>Comece por fé, oração, salvação, santidade, discipulado ou outro tema.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>2. Memorize um versículo por vez</h4>
+                    <p>Associe texto, referência e sentido de forma clara e progressiva.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>3. Revise com inteligência</h4>
+                    <p>O sistema reforça o que precisa continuar vivo na memória.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>4. Aplique o que memorizou</h4>
+                    <p>Transforme memorização em devoção, vida cristã prática e ministério.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h3>Camadas do MemoLab</h3>
+                <p>O mesmo versículo pode ser trabalhado em diferentes profundidades.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="theme-card">
+                    <h4>Camada Bíblica</h4>
+                    <p>Texto, referência, contexto imediato e organização temática.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Camada de Memorização</h4>
+                    <p>Blocos, repetição, associação e técnicas de fixação.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Camada Devocional</h4>
+                    <p>Meditação, oração e aplicação pessoal para o coração.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Camada Ministerial</h4>
+                    <p>Uso em discipulado, evangelismo, aconselhamento e ensino bíblico.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="sobre">
+            <div class="section-header">
+                <h3>Diferenciais</h3>
+                <p>O que torna o MemoLab mais do que um simples app de versículos.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="theme-card">
+                    <h4>Conteúdo Curado</h4>
+                    <p>Não são textos soltos, mas trilhas organizadas com propósito formativo.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Tudo em um só lugar</h4>
+                    <p>Plano, revisão, progresso, prática devocional e uso ministerial.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Revisão Inteligente</h4>
+                    <p>Memorização com método, constância e reforço ao longo do tempo.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Foco em Discipulado</h4>
+                    <p>Mais do que decorar, o objetivo é viver a Palavra de Deus.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="planos">
+            <div class="section-header">
+                <h3>Planos</h3>
+                <p>Escolha o nível de acesso ideal para sua jornada de memorização.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="theme-card">
+                    <h4>Basic</h4>
+                    <p>Até 10 versículos, progresso básico e rotina inicial de memorização.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Essencial</h4>
+                    <p>Até 50 versículos, trilhas temáticas, revisão diária e quizzes.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Premium</h4>
+                    <p>Acesso completo, grupos, histórico, recursos avançados e expansão futura.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section final-cta">
+            <div class="section-header">
+                <h3>Comece sua jornada de memorização bíblica.</h3>
+                <p>
+                    Cadastre-se para memorizar a Palavra com constância, profundidade
+                    e inteligência.
+                </p>
+            </div>
+
+            <div class="hero-actions hero-actions-centered">
+                {% if current_user %}
+                <a href="/dashboard" class="primary-button">Ir para Dashboard</a>
+                <a href="/trilhas" class="secondary-button">Explorar trilhas</a>
+                {% else %}
+                <a href="/register" class="primary-button">Criar conta</a>
+                <a href="/trilhas" class="secondary-button">Explorar trilhas</a>
+                {% endif %}
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+
+            <div class="footer-brand">
+                <div class="brand footer-brand-row">
+                    <img src="/static/images/logo_icon.png" alt="MemoLab" class="logo-icon">
+                    <div class="brand-text">
+                        <span class="brand-name">MemoLab</span>
+                        <span class="brand-subtitle">Memorização bíblica inteligente</span>
+                    </div>
+                </div>
+
+                <p class="footer-description">
+                    Uma plataforma para memorizar a Palavra de Deus com profundidade,
+                    constância e inteligência.
+                </p>
+            </div>
+
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Produto</h4>
+                    <a href="#funcionalidades">Funcionalidades</a>
+                    <a href="#como-funciona">Como funciona</a>
+                    <a href="#planos">Planos</a>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Plataforma</h4>
+                    <a href="#sobre">Sobre</a>
+                    {% if current_user %}
+                    <a href="/dashboard">Dashboard</a>
+                    <a href="/logout">Sair</a>
+                    {% else %}
+                    <a href="/login">Entrar</a>
+                    <a href="/register">Começar agora</a>
+                    {% endif %}
+                </div>
+
+                <div class="footer-column">
+                    <h4>Missão</h4>
+                    <a href="/trilhas">Igrejas</a>
+                    <a href="/trilhas">Discipulado</a>
+                    <a href="/trilhas">Memorização bíblica</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 MemoLab. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

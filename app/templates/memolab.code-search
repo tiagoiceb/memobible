@@ -1,0 +1,100 @@
+# Query: memolab
+# ContextLines: 1
+
+27 results - 6 files
+
+app/main.py:
+   16  
+   17: app.add_middleware(SessionMiddleware, secret_key="memobible-chave-secreta-mvp")
+   18  
+
+  144              "request": request,
+  145:             "titulo": "memobible",
+  146              "versiculo": versiculo,
+
+app/templates/dashboard.html:
+    4      <meta charset="UTF-8">
+    5:     <title>Minha Jornada de Memorização • memobible</title>
+    6      <link rel="stylesheet" href="/static/style.css">
+
+  315          <div class="brand">
+  316:             <img src="/static/images/logo_icon.png" class="logo" alt="memobible">
+  317:             <span class="brand-name">memobible</span>
+  318          </div>
+
+  468          <div class="footer-brand">
+  469:             <img src="/static/images/logo_icon.png" class="logo" alt="memobible">
+  470:             <span class="brand-name">memobible</span>
+  471          </div>
+
+  473          <div class="footer-copy">
+  474:             © 2026 memobible — Memorização bíblica inteligente
+  475          </div>
+
+app/templates/index.html:
+   16                  <div class="brand">
+   17:                     <img src="/static/images/logo_icon.png" alt="memobible" class="logo-icon">
+   18                      <div class="brand-text">
+   19:                         <span class="brand-name">memobible</span>
+   20                      </div>
+
+  164              <div class="section-header">
+  165:                 <h3>Camadas do memobible</h3>
+  166                  <p>O mesmo versículo pode ser trabalhado em diferentes profundidades.</p>
+
+  194                  <h3>Diferenciais</h3>
+  195:                 <p>O que torna o memobible mais do que um simples app de versículos.</p>
+  196              </div>
+
+  271                  <div class="brand footer-brand-row">
+  272:                     <img src="/static/images/logo_icon.png" alt="memobible" class="logo-icon">
+  273                      <div class="brand-text">
+  274:                         <span class="brand-name">memobible</span>
+  275                          <span class="brand-subtitle">Memorização bíblica inteligente</span>
+
+  315          <div class="footer-bottom">
+  316:             <p>© 2026 memobible. Todos os direitos reservados.</p>
+  317          </div>
+
+app/templates/review.html:
+    4      <meta charset="UTF-8">
+    5:     <title>Revisão Diária • memobible</title>
+    6      <link rel="stylesheet" href="/static/style.css">
+
+  183          <div class="brand">
+  184:             <img src="/static/images/logo_icon.png" class="logo" alt="memobible">
+  185:             <span class="brand-name">memobible</span>
+  186          </div>
+
+  233          <div class="footer-brand">
+  234:             <img src="/static/images/logo_icon.png" class="logo" alt="memobible">
+  235:             <span class="brand-name">memobible</span>
+  236          </div>
+
+  238          <div class="footer-copy">
+  239:             © 2026 memobible — Memorização bíblica inteligente
+  240          </div>
+
+app/templates/track_detail.html:
+  110              <div class="brand">
+  111:                 <img src="/static/images/logo_icon.png" alt="memobible" class="logo-icon">
+  112                  <div class="brand-text">
+  113:                     <span class="brand-name">memobible</span>
+  114                  </div>
+
+app/templates/tracks.html:
+    6  <meta charset="UTF-8">
+    7: <title>Trilhas • memobible</title>
+    8  
+
+  189  
+  190: <span class="brand-name">memobible</span>
+  191  
+
+  239  
+  240: <span class="brand-name">memobible</span>
+  241  
+
+  245  
+  246: © 2026 memobible — Memorização bíblica inteligente
+  247  

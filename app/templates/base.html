@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/images/favicon.png">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="site-header-inner">
+        <a href="/" class="site-brand">
+            <img src="/static/images/horizontal.png" alt="MemoBible">
+        </a>
+
+        <nav class="site-nav">
+            <a href="/">Início</a>
+            <a href="/dashboard">Minha Jornada</a>
+            <a href="/trilhas">Trilhas</a>
+            <a href="/revisao">Revisão</a>
+            {% if current_user %}
+                <a href="/logout" class="site-btn">Sair</a>
+            {% else %}
+                <a href="/login" class="site-btn">Entrar</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main class="page-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    <div class="site-footer-inner">
+        <div class="site-footer-brand">
+            <img src="/static/images/horizontal.png" alt="MemoBible">
+        </div>
+        <div class="site-footer-copy">
+            © 2026 MemoBible — Memorização Bíblica Inteligente
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

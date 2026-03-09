@@ -1,202 +1,93 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Revisão Diária • MemoLab</title>
-    <link rel="stylesheet" href="/static/style.css">
+{% extends "base.html" %}
 
-    <style>
-        body{
-            font-family: Arial, Helvetica, sans-serif;
-            background:#f4f6fb;
-            color:#1f2937;
-            margin:0;
-        }
+{% block content %}
 
-        .topbar{
-            background:white;
-            border-bottom:1px solid #e5e7eb;
-        }
+<style>
+    .container{
+        max-width:1000px;
+        margin:auto;
+        padding:40px;
+    }
 
-        .topbar-inner{
-            max-width:1000px;
-            margin:auto;
-            padding:18px 40px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
+    h1{
+        text-align:center;
+        margin-bottom:10px;
+    }
 
-        .brand{
-            display:flex;
-            align-items:center;
-            gap:10px;
-        }
+    .subtitle{
+        text-align:center;
+        color:#64748b;
+        margin-bottom:30px;
+    }
 
-        .logo{
-            width:34px;
-        }
+    .review-card{
+        background:white;
+        padding:24px;
+        border-radius:16px;
+        box-shadow:0 2px 12px rgba(0,0,0,0.05);
+        margin-bottom:20px;
+    }
 
-        .brand-name{
-            font-size:18px;
-            font-weight:700;
-        }
+    .review-card h3{
+        margin-top:0;
+        margin-bottom:10px;
+    }
 
-        .topbar-actions{
-            display:flex;
-            align-items:center;
-            gap:12px;
-        }
+    .reference{
+        color:#2563eb;
+        font-weight:700;
+        margin-bottom:10px;
+    }
 
-        .top-link{
-            color:#475569;
-            text-decoration:none;
-            font-weight:600;
-        }
+    .verse-text{
+        color:#334155;
+        line-height:1.7;
+        margin-bottom:18px;
+    }
 
-        .top-button{
-            background:#4da3ff;
-            padding:10px 16px;
-            border-radius:10px;
-            color:white;
-            text-decoration:none;
-            font-weight:600;
-        }
+    .actions{
+        display:flex;
+        gap:12px;
+        flex-wrap:wrap;
+    }
 
+    .btn{
+        border:none;
+        padding:10px 18px;
+        border-radius:10px;
+        color:white;
+        font-weight:600;
+        cursor:pointer;
+    }
+
+    .btn-correct{
+        background:#16a34a;
+    }
+
+    .btn-wrong{
+        background:#dc2626;
+    }
+
+    .empty-box{
+        background:white;
+        padding:24px;
+        border-radius:16px;
+        box-shadow:0 2px 12px rgba(0,0,0,0.05);
+        text-align:center;
+        color:#475569;
+    }
+
+    @media (max-width: 700px){
         .container{
-            max-width:1000px;
-            margin:auto;
-            padding:40px;
-        }
-
-        h1{
-            text-align:center;
-            margin-bottom:10px;
-        }
-
-        .subtitle{
-            text-align:center;
-            color:#64748b;
-            margin-bottom:30px;
-        }
-
-        .review-card{
-            background:white;
             padding:24px;
-            border-radius:16px;
-            box-shadow:0 2px 12px rgba(0,0,0,0.05);
-            margin-bottom:20px;
         }
-
-        .review-card h3{
-            margin-top:0;
-            margin-bottom:10px;
-        }
-
-        .reference{
-            color:#2563eb;
-            font-weight:700;
-            margin-bottom:10px;
-        }
-
-        .verse-text{
-            color:#334155;
-            line-height:1.7;
-            margin-bottom:18px;
-        }
-
-        .actions{
-            display:flex;
-            gap:12px;
-            flex-wrap:wrap;
-        }
-
-        .btn{
-            border:none;
-            padding:10px 18px;
-            border-radius:10px;
-            color:white;
-            font-weight:600;
-            cursor:pointer;
-        }
-
-        .btn-correct{
-            background:#16a34a;
-        }
-
-        .btn-wrong{
-            background:#dc2626;
-        }
-
-        .empty-box{
-            background:white;
-            padding:24px;
-            border-radius:16px;
-            box-shadow:0 2px 12px rgba(0,0,0,0.05);
-            text-align:center;
-            color:#475569;
-        }
-
-        .footer{
-            margin-top:60px;
-            background:white;
-            border-top:1px solid #e5e7eb;
-        }
-
-        .footer-inner{
-            max-width:1000px;
-            margin:auto;
-            padding:30px 40px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-
-        .footer-brand{
-            display:flex;
-            align-items:center;
-            gap:10px;
-        }
-
-        .footer-copy{
-            color:#64748b;
-            font-size:14px;
-        }
-
-        @media (max-width: 700px){
-            .topbar-inner,
-            .footer-inner{
-                flex-direction:column;
-                align-items:flex-start;
-            }
-
-            .container{
-                padding:24px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-<header class="topbar">
-    <div class="topbar-inner">
-        <div class="brand">
-            <img src="/static/images/logo_icon.png" class="logo" alt="MemoLab">
-            <span class="brand-name">MemoLab</span>
-        </div>
-
-        <div class="topbar-actions">
-            <a href="/" class="top-link">Início</a>
-            <a href="/dashboard" class="top-link">Minha Jornada</a>
-            <a href="/trilhas" class="top-link">Trilhas</a>
-            <a href="/logout" class="top-button">Sair</a>
-        </div>
-    </div>
-</header>
+    }
+</style>
 
 <div class="container">
 
     <h1>Revisão Diária</h1>
+
     <div class="subtitle">
         Você tem {{ review_count }} versículo(s) para revisar hoje.
     </div>
@@ -228,18 +119,4 @@
 
 </div>
 
-<footer class="footer">
-    <div class="footer-inner">
-        <div class="footer-brand">
-            <img src="/static/images/logo_icon.png" class="logo" alt="MemoLab">
-            <span class="brand-name">MemoLab</span>
-        </div>
-
-        <div class="footer-copy">
-            © 2026 MemoLab — Memorização bíblica inteligente
-        </div>
-    </div>
-</footer>
-
-</body>
-</html>
+{% endblock %}

@@ -1,331 +1,195 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Minha Jornada de Memorização • MemoLab</title>
-    <link rel="stylesheet" href="/static/style.css">
+{% extends "base.html" %}
 
-    <style>
-        body{
-            font-family: Arial, Helvetica, sans-serif;
-            background:#f4f6fb;
-            color:#1f2937;
-            margin:0;
+{% block content %}
+
+<style>
+    .container{
+        max-width:1100px;
+        margin:auto;
+        padding:40px;
+    }
+
+    h1{
+        text-align:center;
+        margin-bottom:10px;
+        color:#1f2937;
+    }
+
+    .subtitle{
+        text-align:center;
+        opacity:0.75;
+        margin-bottom:30px;
+        color:#475569;
+    }
+
+    .stats{
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:18px;
+        margin-bottom:30px;
+    }
+
+    .stat{
+        background:white;
+        padding:22px;
+        border-radius:16px;
+        text-align:center;
+        box-shadow:0 2px 12px rgba(0,0,0,0.05);
+    }
+
+    .stat-number{
+        font-size:28px;
+        font-weight:bold;
+        color:#2a6df4;
+    }
+
+    .stat-label{
+        font-size:14px;
+        opacity:0.7;
+        color:#475569;
+    }
+
+    .review{
+        background:white;
+        padding:24px;
+        border-radius:16px;
+        margin-bottom:32px;
+        box-shadow:0 2px 12px rgba(0,0,0,0.05);
+    }
+
+    .review h3{
+        margin-top:0;
+        color:#1f2937;
+    }
+
+    .review p{
+        color:#475569;
+    }
+
+    .heatmap-card{
+        background:white;
+        padding:24px;
+        border-radius:16px;
+        margin-bottom:40px;
+        box-shadow:0 2px 12px rgba(0,0,0,0.05);
+    }
+
+    .heatmap-card h3{
+        margin-top:0;
+        margin-bottom:8px;
+        color:#1f2937;
+    }
+
+    .heatmap-subtitle{
+        color:#64748b;
+        font-size:14px;
+        margin-bottom:18px;
+    }
+
+    .heatmap-grid{
+        display:flex;
+        flex-wrap:wrap;
+        gap:6px;
+    }
+
+    .heatmap-box{
+        width:14px;
+        height:14px;
+        border-radius:4px;
+    }
+
+    .tracks-title{
+        margin-bottom:20px;
+        color:#1f2937;
+    }
+
+    .tracks-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+        gap:22px;
+    }
+
+    .track{
+        background:white;
+        padding:22px;
+        border-radius:16px;
+        transition:all .2s;
+        box-shadow:0 2px 12px rgba(0,0,0,0.05);
+    }
+
+    .track:hover{
+        transform:translateY(-3px);
+    }
+
+    .track-seteceb{
+        background:#6b0f1a;
+        border:2px solid #6b0f1a;
+    }
+
+    .track h3{
+        margin-top:0;
+        margin-bottom:12px;
+        color:#1f2937;
+    }
+
+    .track p{
+        color:#475569;
+        line-height:1.6;
+    }
+
+    .track-meta{
+        margin-top:14px;
+        margin-bottom:10px;
+        color:#334155;
+        font-weight:500;
+    }
+
+    .track-seteceb h3,
+    .track-seteceb p,
+    .track-seteceb .track-meta{
+        color:white;
+    }
+
+    .track-seteceb a{
+        color:white;
+    }
+
+    .progress{
+        background:#e5e7eb;
+        height:8px;
+        border-radius:999px;
+        margin:10px 0 14px 0;
+        overflow:hidden;
+    }
+
+    .progress-bar{
+        background:#4da3ff;
+        height:8px;
+        border-radius:999px;
+    }
+
+    @media (max-width: 1100px){
+        .stats{
+            grid-template-columns:repeat(3,1fr);
         }
+    }
 
-        .topbar{
-            background:white;
-            border-bottom:1px solid #e5e7eb;
+    @media (max-width: 900px){
+        .stats{
+            grid-template-columns:repeat(2,1fr);
         }
+    }
 
-        .topbar-inner{
-            max-width:1100px;
-            margin:auto;
-            padding:18px 40px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-
-        .brand{
-            display:flex;
-            align-items:center;
-            gap:10px;
-        }
-
-        .logo{
-            width:34px;
-            height:auto;
-        }
-
-        .brand-name{
-            font-size:18px;
-            font-weight:700;
-            color:#1f2937;
-        }
-
-        .topbar-actions{
-            display:flex;
-            align-items:center;
-            gap:12px;
-        }
-
-        .top-link{
-            color:#475569;
-            text-decoration:none;
-            font-weight:600;
-        }
-
-        .top-button{
-            background:#4da3ff;
-            padding:10px 16px;
-            border-radius:10px;
-            color:white;
-            text-decoration:none;
-            font-weight:600;
+    @media (max-width: 600px){
+        .stats{
+            grid-template-columns:1fr;
         }
 
         .container{
-            max-width:1100px;
-            margin:auto;
-            padding:40px;
-        }
-
-        h1{
-            text-align:center;
-            margin-bottom:10px;
-            color:#1f2937;
-        }
-
-        .subtitle{
-            text-align:center;
-            opacity:0.75;
-            margin-bottom:30px;
-            color:#475569;
-        }
-
-        .stats{
-            display:grid;
-            grid-template-columns:repeat(5,1fr);
-            gap:18px;
-            margin-bottom:30px;
-        }
-
-        .stat{
-            background:white;
-            padding:22px;
-            border-radius:16px;
-            text-align:center;
-            box-shadow:0 2px 12px rgba(0,0,0,0.05);
-        }
-
-        .stat-number{
-            font-size:28px;
-            font-weight:bold;
-            color:#2a6df4;
-        }
-
-        .stat-label{
-            font-size:14px;
-            opacity:0.7;
-            color:#475569;
-        }
-
-        .review{
-            background:white;
             padding:24px;
-            border-radius:16px;
-            margin-bottom:32px;
-            box-shadow:0 2px 12px rgba(0,0,0,0.05);
         }
-
-        .review h3{
-            margin-top:0;
-            color:#1f2937;
-        }
-
-        .review p{
-            color:#475569;
-        }
-
-        .review button{
-            background:#4da3ff;
-            border:none;
-            padding:10px 18px;
-            border-radius:10px;
-            color:white;
-            cursor:pointer;
-            font-weight:600;
-        }
-
-        .heatmap-card{
-            background:white;
-            padding:24px;
-            border-radius:16px;
-            margin-bottom:40px;
-            box-shadow:0 2px 12px rgba(0,0,0,0.05);
-        }
-
-        .heatmap-card h3{
-            margin-top:0;
-            margin-bottom:8px;
-            color:#1f2937;
-        }
-
-        .heatmap-subtitle{
-            color:#64748b;
-            font-size:14px;
-            margin-bottom:18px;
-        }
-
-        .heatmap-grid{
-            display:flex;
-            flex-wrap:wrap;
-            gap:6px;
-        }
-
-        .heatmap-box{
-            width:14px;
-            height:14px;
-            border-radius:4px;
-        }
-
-        .tracks-title{
-            margin-bottom:20px;
-            color:#1f2937;
-        }
-
-        .tracks-grid{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-            gap:22px;
-        }
-
-        .track{
-            background:white;
-            padding:22px;
-            border-radius:16px;
-            transition:all .2s;
-            box-shadow:0 2px 12px rgba(0,0,0,0.05);
-        }
-
-        .track:hover{
-            transform:translateY(-3px);
-        }
-
-        .track-seteceb{
-            background:#6b0f1a;
-            border:2px solid #6b0f1a;
-        }
-
-        .track h3{
-            margin-top:0;
-            margin-bottom:12px;
-            color:#1f2937;
-        }
-
-        .track p{
-            color:#475569;
-            line-height:1.6;
-        }
-
-        .track-meta{
-            margin-top:14px;
-            margin-bottom:10px;
-            color:#334155;
-            font-weight:500;
-        }
-
-        .track-seteceb h3,
-        .track-seteceb p,
-        .track-seteceb .track-meta{
-            color:white;
-        }
-
-        .track-seteceb a{
-            color:white;
-        }
-
-        .progress{
-            background:#e5e7eb;
-            height:8px;
-            border-radius:999px;
-            margin:10px 0 14px 0;
-            overflow:hidden;
-        }
-
-        .progress-bar{
-            background:#4da3ff;
-            height:8px;
-            border-radius:999px;
-        }
-
-        a{
-            color:#2a6df4;
-            text-decoration:none;
-            font-weight:600;
-        }
-
-        .footer{
-            margin-top:60px;
-            background:white;
-            border-top:1px solid #e5e7eb;
-        }
-
-        .footer-inner{
-            max-width:1100px;
-            margin:auto;
-            padding:30px 40px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:16px;
-        }
-
-        .footer-brand{
-            display:flex;
-            align-items:center;
-            gap:10px;
-        }
-
-        .footer-copy{
-            color:#64748b;
-            font-size:14px;
-        }
-
-        @media (max-width: 1100px){
-            .stats{
-                grid-template-columns:repeat(3,1fr);
-            }
-        }
-
-        @media (max-width: 900px){
-            .stats{
-                grid-template-columns:repeat(2,1fr);
-            }
-
-            .topbar-inner,
-            .footer-inner{
-                flex-direction:column;
-                align-items:flex-start;
-            }
-        }
-
-        @media (max-width: 600px){
-            .stats{
-                grid-template-columns:1fr;
-            }
-
-            .container{
-                padding:24px;
-            }
-
-            .topbar-inner,
-            .footer-inner{
-                padding:20px 24px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-<header class="topbar">
-    <div class="topbar-inner">
-
-        <div class="brand">
-            <img src="/static/images/logo_icon.png" class="logo" alt="MemoLab">
-            <span class="brand-name">MemoLab</span>
-        </div>
-
-        <div class="topbar-actions">
-            <a href="/" class="top-link">Início</a>
-            <a href="/trilhas" class="top-link">Trilhas</a>
-            <a href="/revisao" class="top-link">Revisão</a>
-            <a href="/logout" class="top-button">Sair</a>
-        </div>
-
-    </div>
-</header>
+    }
+</style>
 
 <div class="container">
 
@@ -336,7 +200,6 @@
     </div>
 
     <div class="stats">
-
         <div class="stat">
             <div class="stat-number">{{ total_verses }}</div>
             <div class="stat-label">versículos disponíveis</div>
@@ -361,11 +224,9 @@
             <div class="stat-number">{{ done_today }}</div>
             <div class="stat-label">concluídos hoje</div>
         </div>
-
     </div>
 
     <div class="review">
-
         <h3>Revisão diária</h3>
 
         <p>
@@ -376,14 +237,12 @@
             {% endif %}
         </p>
 
-        <a href="/revisao">
-            <button>Ir para revisão</button>
-        </a>
-
+        <a href="/revisao" class="top-button">Ir para revisão</a>
     </div>
 
     <div class="heatmap-card">
         <h3>Atividade dos últimos 90 dias</h3>
+
         <div class="heatmap-subtitle">
             Cada quadrado representa sua atividade diária de memorização e revisão.
         </div>
@@ -393,14 +252,12 @@
                 <div
                     class="heatmap-box"
                     title="{{ item.date }} - {{ item.count }} atividade(s)"
-                    style="
-                        background:
-                            {% if item.count == 0 %}#e5e7eb
-                            {% elif item.count < 3 %}#bfdbfe
-                            {% elif item.count < 6 %}#60a5fa
-                            {% else %}#2563eb
-                            {% endif %};
-                    ">
+                    style="background:
+                    {% if item.count == 0 %}#e5e7eb
+                    {% elif item.count < 3 %}#bfdbfe
+                    {% elif item.count < 6 %}#60a5fa
+                    {% else %}#2563eb
+                    {% endif %};">
                 </div>
             {% endfor %}
         </div>
@@ -409,73 +266,27 @@
     <h2 class="tracks-title">Trilhas de Memorização</h2>
 
     <div class="tracks-grid">
+        {% for item in track_stats %}
+            <div class="track{% if item.track.title == 'Seteceb 1º 2026' %} track-seteceb{% endif %}">
+                <h3>{{ item.track.title }}</h3>
 
-        {% for item in track_stats if item.track.title == 'Seteceb 1º 2026' %}
+                <p>{{ item.track.description }}</p>
 
-        <div class="track track-seteceb">
+                <div class="track-meta">
+                    {{ item.memorized }} / {{ item.total }} versículos memorizados
+                </div>
 
-            <h3>{{ item.track.title }}</h3>
+                <div class="progress">
+                    <div class="progress-bar" style="width: {{ item.percentage }}%"></div>
+                </div>
 
-            <p>{{ item.track.description }}</p>
-
-            <div class="track-meta">
-                {{ item.memorized }} / {{ item.total }} versículos memorizados
+                <a href="/trilha/{{ item.track.id }}">
+                    Abrir trilha →
+                </a>
             </div>
-
-            <div class="progress">
-                <div class="progress-bar" style="width: {{ item.percentage }}%"></div>
-            </div>
-
-            <a href="/trilha/{{ item.track.id }}">
-                Abrir trilha →
-            </a>
-
-        </div>
-
         {% endfor %}
-
-        {% for item in track_stats if item.track.title != 'Seteceb 1º 2026' %}
-
-        <div class="track">
-
-            <h3>{{ item.track.title }}</h3>
-
-            <p>{{ item.track.description }}</p>
-
-            <div class="track-meta">
-                {{ item.memorized }} / {{ item.total }} versículos memorizados
-            </div>
-
-            <div class="progress">
-                <div class="progress-bar" style="width: {{ item.percentage }}%"></div>
-            </div>
-
-            <a href="/trilha/{{ item.track.id }}">
-                Abrir trilha →
-            </a>
-
-        </div>
-
-        {% endfor %}
-
     </div>
 
 </div>
 
-<footer class="footer">
-    <div class="footer-inner">
-
-        <div class="footer-brand">
-            <img src="/static/images/logo_icon.png" class="logo" alt="MemoLab">
-            <span class="brand-name">MemoLab</span>
-        </div>
-
-        <div class="footer-copy">
-            © 2026 MemoLab — Memorização bíblica inteligente
-        </div>
-
-    </div>
-</footer>
-
-</body>
-</html>
+{% endblock %}

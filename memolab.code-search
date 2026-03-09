@@ -1,0 +1,42 @@
+# Query: memolab
+
+27 results - 6 files
+
+app/main.py:
+   17: app.add_middleware(SessionMiddleware, secret_key="memobible-chave-secreta-mvp")
+  145:             "titulo": "memobible",
+
+app/templates/dashboard.html:
+    5:     <title>Minha Jornada de Memorização • memobible</title>
+  316:             <img src="/static/images/logo_icon.png" class="logo" alt="memobible">
+  317:             <span class="brand-name">memobible</span>
+  469:             <img src="/static/images/logo_icon.png" class="logo" alt="memobible">
+  470:             <span class="brand-name">memobible</span>
+  474:             © 2026 memobible — Memorização bíblica inteligente
+
+app/templates/index.html:
+   17:                     <img src="/static/images/logo_icon.png" alt="memobible" class="logo-icon">
+   19:                         <span class="brand-name">memobible</span>
+  165:                 <h3>Camadas do memobible</h3>
+  195:                 <p>O que torna o memobible mais do que um simples app de versículos.</p>
+  272:                     <img src="/static/images/logo_icon.png" alt="memobible" class="logo-icon">
+  274:                         <span class="brand-name">memobible</span>
+  316:             <p>© 2026 memobible. Todos os direitos reservados.</p>
+
+app/templates/review.html:
+    5:     <title>Revisão Diária • memobible</title>
+  184:             <img src="/static/images/logo_icon.png" class="logo" alt="memobible">
+  185:             <span class="brand-name">memobible</span>
+  234:             <img src="/static/images/logo_icon.png" class="logo" alt="memobible">
+  235:             <span class="brand-name">memobible</span>
+  239:             © 2026 memobible — Memorização bíblica inteligente
+
+app/templates/track_detail.html:
+  111:                 <img src="/static/images/logo_icon.png" alt="memobible" class="logo-icon">
+  113:                     <span class="brand-name">memobible</span>
+
+app/templates/tracks.html:
+    7: <title>Trilhas • memobible</title>
+  190: <span class="brand-name">memobible</span>
+  240: <span class="brand-name">memobible</span>
+  246: © 2026 memobible — Memorização bíblica inteligente

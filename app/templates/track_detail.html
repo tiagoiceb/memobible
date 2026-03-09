@@ -1,132 +1,101 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ titulo }}</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="icon" href="/static/images/favicon.png">
+{% extends "base.html" %}
 
-    <style>
-        .track-shell {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 40px 20px 80px;
-        }
+{% block content %}
 
-        .track-hero {
-            background: white;
-            border-radius: 18px;
-            padding: 28px;
-            margin-bottom: 28px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-            border: 1px solid #eef1f6;
+<style>
+    .track-shell {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+    }
+
+    .track-hero {
+        background: white;
+        border-radius: 18px;
+        padding: 28px;
+        margin-bottom: 28px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        border: 1px solid #eef1f6;
+    }
+
+    .track-hero h1 {
+        margin: 0 0 10px;
+        font-size: 32px;
+    }
+
+    .track-hero p {
+        margin: 0;
+        color: #5f6b7a;
+        line-height: 1.7;
+    }
+
+    .group-block {
+        margin-bottom: 30px;
+    }
+
+    .group-title {
+        font-size: 22px;
+        margin: 0 0 16px;
+    }
+
+    .group-subtitle {
+        margin: -4px 0 18px;
+        color: #6b7280;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .verse-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .verse-card {
+        background: white;
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        border: 1px solid #eef1f6;
+    }
+
+    .verse-card h3 {
+        margin: 0 0 12px;
+        font-size: 19px;
+    }
+
+    .verse-card p {
+        color: #5f6b7a;
+        line-height: 1.7;
+    }
+
+    .verse-status {
+        margin: 16px 0 14px;
+        font-size: 14px;
+        color: #374151;
+    }
+
+    .track-button {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        background: #eef2ff;
+        color: #3730a3;
+    }
+
+    @media (max-width: 800px) {
+        .verse-grid {
+            grid-template-columns: 1fr;
         }
 
         .track-hero h1 {
-            margin: 0 0 10px;
-            font-size: 32px;
+            font-size: 28px;
         }
-
-        .track-hero p {
-            margin: 0;
-            color: #5f6b7a;
-            line-height: 1.7;
-        }
-
-        .group-block {
-            margin-bottom: 30px;
-        }
-
-        .group-title {
-            font-size: 22px;
-            margin: 0 0 16px;
-        }
-
-        .group-subtitle {
-            margin: -4px 0 18px;
-            color: #6b7280;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
-        .verse-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .verse-card {
-            background: white;
-            border-radius: 18px;
-            padding: 22px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-            border: 1px solid #eef1f6;
-        }
-
-        .verse-card h3 {
-            margin: 0 0 12px;
-            font-size: 19px;
-        }
-
-        .verse-card p {
-            color: #5f6b7a;
-            line-height: 1.7;
-        }
-
-        .verse-status {
-            margin: 16px 0 14px;
-            font-size: 14px;
-            color: #374151;
-        }
-
-        .track-button {
-            display: inline-block;
-            padding: 10px 16px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            background: #eef2ff;
-            color: #3730a3;
-        }
-
-        @media (max-width: 800px) {
-            .verse-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .track-hero h1 {
-                font-size: 28px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-<header class="topbar">
-    <div class="topbar-content">
-        <div class="nav-left">
-            <div class="brand">
-                <img src="/static/images/logo_icon.png" alt="MemoLab" class="logo-icon">
-                <div class="brand-text">
-                    <span class="brand-name">MemoLab</span>
-                </div>
-            </div>
-        </div>
-
-        <nav class="nav-center">
-            <a href="/">Início</a>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/trilhas">Trilhas</a>
-            <a href="/revisao">Revisão</a>
-        </nav>
-
-        <div class="nav-right">
-            <a href="/trilhas" class="login-link">Voltar</a>
-        </div>
-    </div>
-</header>
+    }
+</style>
 
 <main class="track-shell">
 
@@ -188,5 +157,4 @@
 
 </main>
 
-</body>
-</html>
+{% endblock %}

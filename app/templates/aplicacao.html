@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/images/favicon.png">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="topbar-content">
+            <div class="nav-left">
+                <div class="brand">
+                    <img src="/static/images/horizontal.png" height="70">
+                </div>
+            </div>
+
+            <nav class="nav-center">
+                <a href="/">Início</a>
+                <a href="/dashboard">Minha Jornada</a>
+                <a href="/trilhas">Trilhas</a>
+                <a href="/revisao">Revisão</a>
+            </nav>
+
+            <div class="nav-right">
+                {% if current_user %}
+                <span class="login-link">Olá, {{ current_user.name }}</span>
+                <a href="/logout" class="top-button">Sair</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="page">
+        <section class="section">
+            <div class="section-header">
+                <h3>Aplicação Prática</h3>
+                <p>Transforme memorização em vida cristã, discipulado, aconselhamento e missão.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="theme-card">
+                    <h4>Aplicação pessoal</h4>
+                    <p>Pergunte como cada texto confronta, consola, orienta e fortalece sua caminhada com Deus.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Discipulado</h4>
+                    <p>Use os versículos memorizados para encorajar, ensinar e acompanhar outras pessoas.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Evangelismo e aconselhamento</h4>
+                    <p>Leve a Palavra ao coração das conversas, com clareza, graça e convicção bíblica.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

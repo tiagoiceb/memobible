@@ -168,6 +168,14 @@
         border-radius:999px;
     }
 
+    .track-seteceb .progress{
+        background:rgba(255,255,255,0.25);
+    }
+
+    .track-seteceb .progress-bar{
+        background:#f87171;
+    }
+
     @media (max-width: 1100px){
         .stats{
             grid-template-columns:repeat(3,1fr);
@@ -196,32 +204,32 @@
     <h1>Minha Jornada de Memorização</h1>
 
     <div class="subtitle">
-        Olá, {{ user.name }}. Memorize a Palavra de Deus de forma progressiva.
+        Olá, {{ current_user.name if current_user else 'Usuário' }}. Memorize a Palavra de Deus de forma progressiva.
     </div>
 
     <div class="stats">
         <div class="stat">
-            <div class="stat-number">{{ total_verses }}</div>
+            <div class="stat-number">{{ total_verses|default(0) }}</div>
             <div class="stat-label">versículos disponíveis</div>
         </div>
 
         <div class="stat">
-            <div class="stat-number">{{ memorized_count }}</div>
+            <div class="stat-number">{{ memorized_count|default(0) }}</div>
             <div class="stat-label">memorizados</div>
         </div>
 
         <div class="stat">
-            <div class="stat-number">{{ remaining_count }}</div>
+            <div class="stat-number">{{ remaining_count|default(0) }}</div>
             <div class="stat-label">restantes</div>
         </div>
 
         <div class="stat">
-            <div class="stat-number">{{ review_count }}</div>
+            <div class="stat-number">{{ review_count|default(0) }}</div>
             <div class="stat-label">para revisão</div>
         </div>
 
         <div class="stat">
-            <div class="stat-number">{{ done_today }}</div>
+            <div class="stat-number">{{ done_today|default(0) }}</div>
             <div class="stat-label">concluídos hoje</div>
         </div>
     </div>
@@ -230,8 +238,8 @@
         <h3>Revisão diária</h3>
 
         <p>
-            {% if review_count > 0 %}
-                Você tem {{ review_count }} versículo(s) para revisar hoje.
+            {% if review_count|default(0) > 0 %}
+                Você tem {{ review_count|default(0) }} versículo(s) para revisar hoje.
             {% else %}
                 Hoje não há revisões pendentes.
             {% endif %}
@@ -248,7 +256,7 @@
         </div>
 
         <div class="heatmap-grid">
-            {% for item in heatmap_data %}
+            {% for item in heatmap_data|default([]) %}
                 <div
                     class="heatmap-box"
                     title="{{ item.date }} - {{ item.count }} atividade(s)"
@@ -266,7 +274,7 @@
     <h2 class="tracks-title">Trilhas de Memorização</h2>
 
     <div class="tracks-grid">
-        {% for item in track_stats %}
+        {% for item in track_stats|default([]) %}
             <div class="track{% if item.track.title == 'Seteceb 1º 2026' %} track-seteceb{% endif %}">
                 <h3>{{ item.track.title }}</h3>
 

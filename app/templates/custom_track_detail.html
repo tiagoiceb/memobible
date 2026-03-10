@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.track-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+}
+
+.track-hero {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    border: 1px solid #eef1f6;
+}
+
+.track-hero h1 {
+    margin: 0 0 10px;
+    font-size: 32px;
+}
+
+.track-hero p {
+    margin: 0;
+    color: #5f6b7a;
+    line-height: 1.7;
+}
+
+.verse-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.verse-card {
+    background: white;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    border: 1px solid #eef1f6;
+}
+
+.verse-card h3 {
+    margin: 0 0 12px;
+    font-size: 19px;
+}
+
+.verse-card p {
+    color: #5f6b7a;
+    line-height: 1.7;
+}
+
+.verse-status {
+    margin: 16px 0 14px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.track-button {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    background: #eef2ff;
+    color: #3730a3;
+}
+
+@media (max-width: 800px) {
+    .verse-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .track-hero h1 {
+        font-size: 28px;
+    }
+}
+</style>
+
+<main class="track-shell">
+
+    <section class="track-hero">
+        <h1>{{ custom_track.title }}</h1>
+        <p>{{ custom_track.description or "Sem descrição." }}</p>
+    </section>
+
+    <div class="verse-grid">
+        {% for item in track_verses %}
+        <div class="verse-card">
+            <h3>{{ item.verse.reference }}</h3>
+            <p>{{ item.verse.text }}</p>
+
+            <div class="verse-status">
+                <strong>Status:</strong>
+                {% if item.verse.id in progress_map and progress_map[item.verse.id].memorized %}
+                    Memorizado
+                {% else %}
+                    Em andamento
+                {% endif %}
+            </div>
+
+            <a href="/versiculo/{{ item.verse.id }}" class="track-button">Abrir versículo</a>
+        </div>
+        {% endfor %}
+    </div>
+
+</main>
+
+{% endblock %}

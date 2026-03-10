@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/images/favicon.png">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="topbar-content">
+            <div class="nav-left">
+                <div class="brand">
+                    <img src="/static/images/horizontal.png" height="70">
+                </div>
+            </div>
+
+            <nav class="nav-center">
+                <a href="/">Início</a>
+                <a href="/dashboard">Minha Jornada</a>
+                <a href="/trilhas">Trilhas</a>
+                <a href="/revisao">Revisão</a>
+            </nav>
+
+            <div class="nav-right">
+                {% if current_user %}
+                <span class="login-link">Olá, {{ current_user.name }}</span>
+                <a href="/logout" class="top-button">Sair</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="page">
+        <section class="section">
+            <div class="section-header">
+                <h3>Mapas e Resumos</h3>
+                <p>Visualize temas, relações e sínteses para organizar melhor sua memória bíblica.</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="theme-card">
+                    <h4>Resumo por tema</h4>
+                    <p>Veja os versículos agrupados por assunto para reforçar a visão do todo.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Mapa mental bíblico</h4>
+                    <p>Em breve, esta área poderá mostrar conexões simples entre temas e trilhas.</p>
+                </div>
+
+                <div class="theme-card">
+                    <h4>Revisão visual</h4>
+                    <p>Use quadros resumidos para revisar rapidamente aquilo que já foi memorizado.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

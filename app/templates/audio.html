@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="section">
+    <div class="section-header">
+        <h3>Áudio e Repetição</h3>
+        <p>Escolha um versículo e ouça sua leitura para reforçar a memorização.</p>
+    </div>
+
+    <div class="cards-grid">
+        {% for verse in verses %}
+        <div class="theme-card">
+            <h4>{{ verse.reference }}</h4>
+            <p>{{ verse.text }}</p>
+
+            <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="site-btn" onclick="falarTexto(`{{ verse.text | replace('`', '\\`') }}`)">
+                    Ouvir
+                </button>
+
+                <button class="site-btn" onclick="falarTexto(`{{ verse.reference }}. {{ verse.text | replace('`', '\\`') }}`)">
+                    Ouvir com referência
+                </button>
+
+                <button class="site-btn" onclick="pararAudio()">
+                    Parar
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+function falarVersiculo() {
+
+window.speechSynthesis.cancel()
+
+const texto = document.getElementById("verseText").innerText
+
+const fala = new SpeechSynthesisUtterance(texto)
+
+const vozes = speechSynthesis.getVoices()
+
+const vozBR = vozes.find(v => 
+    v.lang === "pt-BR" && v.name.toLowerCase().includes("male")
+)
+
+if (vozBR) {
+    fala.voice = vozBR
+}
+
+fala.lang = "pt-BR"
+fala.rate = 0.9
+fala.pitch = 0.9
+
+speechSynthesis.speak(fala)
+}
+</script>
+
+{% endblock %}

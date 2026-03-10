@@ -76,6 +76,13 @@
         color: #374151;
     }
 
+    .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+    }
+
     .track-button {
         display: inline-block;
         padding: 10px 16px;
@@ -84,6 +91,25 @@
         font-weight: 600;
         background: #eef2ff;
         color: #3730a3;
+        border: none;
+        cursor: pointer;
+    }
+
+    .track-button.primary {
+        background: #4CAF50;
+        color: white;
+    }
+
+    .audio-inline {
+        margin-top: 12px;
+        width: 100%;
+    }
+
+    .hidden-word {
+        background: #dcdcdc;
+        color: transparent;
+        border-radius: 4px;
+        padding: 2px 4px;
     }
 
     @media (max-width: 800px) {
@@ -114,7 +140,7 @@
                 {% for verse in verses %}
                 <div class="verse-card">
                     <h3>{{ verse.reference }}</h3>
-                    <p>{{ verse.text }}</p>
+                    <p id="verse-text-{{ verse.id }}">{{ verse.text }}</p>
 
                     <div class="verse-status">
                         <strong>Status:</strong>
@@ -125,7 +151,47 @@
                         {% endif %}
                     </div>
 
-                    <a href="/versiculo/{{ verse.id }}" class="track-button">Memorizar</a>
+                    <div class="actions">
+                        <a href="/versiculo/{{ verse.id }}" class="track-button">Abrir</a>
+
+                        <button type="button" class="track-button" onclick="hideWords({{ verse.id }})">
+                            Esconder palavras
+                        </button>
+
+                        <button type="button" class="track-button" onclick="tocarAudioTexto({{ verse.id }})">
+                            Ouvir versículo
+                        </button>
+
+                        <button type="button" class="track-button" onclick="tocarAudioComReferencia({{ verse.id }})">
+                            Ouvir com referência
+                        </button>
+
+                        <button type="button" class="track-button" onclick="pararAudio({{ verse.id }})">
+                            Parar
+                        </button>
+
+                        {% if verse.id in progress_map and progress_map[verse.id].memorized %}
+                            <span class="track-button primary" style="opacity: 0.8; cursor: default;">
+                                Memorizado
+                            </span>
+                        {% else %}
+                            <form method="post" action="/versiculo/{{ verse.id }}/memorizar" style="margin: 0;">
+                                <button type="submit" class="track-button primary">
+                                    Marcar como memorizado
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                    <audio id="audio-text-{{ verse.id }}" class="audio-inline" controls preload="none">
+                        <source src="/versiculo/{{ verse.id }}/audio?mode=text_only" type="audio/mpeg">
+                        Seu navegador não suporta áudio.
+                    </audio>
+
+                    <audio id="audio-ref-{{ verse.id }}" class="audio-inline" controls preload="none" style="display:none;">
+                        <source src="/versiculo/{{ verse.id }}/audio?mode=with_reference" type="audio/mpeg">
+                        Seu navegador não suporta áudio.
+                    </audio>
                 </div>
                 {% endfor %}
             </div>
@@ -137,7 +203,7 @@
                 {% for verse in track.verses %}
                 <div class="verse-card">
                     <h3>{{ verse.reference }}</h3>
-                    <p>{{ verse.text }}</p>
+                    <p id="verse-text-{{ verse.id }}">{{ verse.text }}</p>
 
                     <div class="verse-status">
                         <strong>Status:</strong>
@@ -148,7 +214,47 @@
                         {% endif %}
                     </div>
 
-                    <a href="/versiculo/{{ verse.id }}" class="track-button">Memorizar</a>
+                    <div class="actions">
+                        <a href="/versiculo/{{ verse.id }}" class="track-button">Abrir</a>
+
+                        <button type="button" class="track-button" onclick="hideWords({{ verse.id }})">
+                            Esconder palavras
+                        </button>
+
+                        <button type="button" class="track-button" onclick="tocarAudioTexto({{ verse.id }})">
+                            Ouvir versículo
+                        </button>
+
+                        <button type="button" class="track-button" onclick="tocarAudioComReferencia({{ verse.id }})">
+                            Ouvir com referência
+                        </button>
+
+                        <button type="button" class="track-button" onclick="pararAudio({{ verse.id }})">
+                            Parar
+                        </button>
+
+                        {% if verse.id in progress_map and progress_map[verse.id].memorized %}
+                            <span class="track-button primary" style="opacity: 0.8; cursor: default;">
+                                Memorizado
+                            </span>
+                        {% else %}
+                            <form method="post" action="/versiculo/{{ verse.id }}/memorizar" style="margin: 0;">
+                                <button type="submit" class="track-button primary">
+                                    Marcar como memorizado
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                    <audio id="audio-text-{{ verse.id }}" class="audio-inline" controls preload="none">
+                        <source src="/versiculo/{{ verse.id }}/audio?mode=text_only" type="audio/mpeg">
+                        Seu navegador não suporta áudio.
+                    </audio>
+
+                    <audio id="audio-ref-{{ verse.id }}" class="audio-inline" controls preload="none" style="display:none;">
+                        <source src="/versiculo/{{ verse.id }}/audio?mode=with_reference" type="audio/mpeg">
+                        Seu navegador não suporta áudio.
+                    </audio>
                 </div>
                 {% endfor %}
             </div>
@@ -156,5 +262,54 @@
     {% endif %}
 
 </main>
+
+<script>
+    function hideWords(verseId) {
+        const verse = document.getElementById(`verse-text-${verseId}`);
+        const words = verse.innerText.split(" ");
+
+        const hidden = words.map(function(word) {
+            if (Math.random() < 0.35) {
+                return '<span class="hidden-word">' + word + '</span>';
+            }
+            return word;
+        });
+
+        verse.innerHTML = hidden.join(" ");
+    }
+
+    function pararTodosOsAudios() {
+        const audios = document.querySelectorAll("audio");
+        audios.forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+        });
+    }
+
+    function tocarAudioTexto(verseId) {
+        pararTodosOsAudios();
+        const audio = document.getElementById(`audio-text-${verseId}`);
+        audio.currentTime = 0;
+        audio.play();
+    }
+
+    function tocarAudioComReferencia(verseId) {
+        pararTodosOsAudios();
+        const audio = document.getElementById(`audio-ref-${verseId}`);
+        audio.currentTime = 0;
+        audio.play();
+    }
+
+    function pararAudio(verseId) {
+        const audioTexto = document.getElementById(`audio-text-${verseId}`);
+        const audioRef = document.getElementById(`audio-ref-${verseId}`);
+
+        audioTexto.pause();
+        audioTexto.currentTime = 0;
+
+        audioRef.pause();
+        audioRef.currentTime = 0;
+    }
+</script>
 
 {% endblock %}

@@ -13,7 +13,7 @@
         background: white;
         padding: 40px;
         border-radius: 14px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
         margin-bottom: 30px;
     }
 
@@ -33,6 +33,7 @@
         display: flex;
         gap: 15px;
         flex-wrap: wrap;
+        align-items: center;
     }
 
     .btn {
@@ -42,6 +43,9 @@
         border: none;
         cursor: pointer;
         font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .btn-primary {
@@ -60,10 +64,25 @@
         border-radius: 4px;
         padding: 2px 4px;
     }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 18px;
+        text-decoration: none;
+    }
+
+    .status-line {
+        margin-top: 24px;
+    }
+
+    .audio-player {
+        margin-top: 20px;
+        width: 100%;
+    }
 </style>
 
 <div class="verse-container">
-    <p><a href="/trilha/{{ verse.track.id }}">← Voltar à trilha</a></p>
+    <a href="/trilha/{{ verse.track.id }}" class="back-link">← Voltar à trilha</a>
 
     <div class="verse-box">
         <div class="verse-reference">
@@ -74,7 +93,7 @@
             {{ verse.text }}
         </div>
 
-        <p style="margin-top: 24px;">
+        <p class="status-line">
             <strong>Status:</strong>
             {% if progress.memorized %}
                 Memorizado
@@ -84,12 +103,20 @@
         </p>
 
         <div class="controls">
+            <button type="button" class="btn btn-secondary" onclick="tocarAudioVersiculo()">
+                Ouvir áudio
+            </button>
+
+            <button type="button" class="btn btn-secondary" onclick="pararAudio()">
+                Parar áudio
+            </button>
+
             <button type="button" class="btn btn-secondary" onclick="hideWords()">
                 Esconder palavras
             </button>
 
             {% if not progress.memorized %}
-            <form method="post" action="/versiculo/{{ verse.id }}/memorizar">
+            <form method="post" action="/versiculo/{{ verse.id }}/memorizar" style="margin: 0;">
                 <button type="submit" class="btn btn-primary">
                     Marcar como memorizado
                 </button>
@@ -100,10 +127,27 @@
             </span>
             {% endif %}
         </div>
+
+        <audio id="verseAudio" class="audio-player" controls preload="none">
+            <source src="/versiculo/{{ verse.id }}/audio" type="audio/mpeg">
+            Seu navegador não suporta áudio.
+        </audio>
     </div>
 </div>
 
 <script>
+    function tocarAudioVersiculo() {
+        const audio = document.getElementById("verseAudio");
+        audio.currentTime = 0;
+        audio.play();
+    }
+
+    function pararAudio() {
+        const audio = document.getElementById("verseAudio");
+        audio.pause();
+        audio.currentTime = 0;
+    }
+
     function hideWords() {
         const verse = document.getElementById("verseText");
         const words = verse.innerText.split(" ");

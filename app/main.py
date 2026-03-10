@@ -27,6 +27,10 @@ from app.models import (
     CustomTrackVerse,
 )
 
+# --------------------------------------------------
+# CONFIGURAÇÃO
+# --------------------------------------------------
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -55,19 +59,15 @@ eleven_client = ElevenLabs(api_key=ELEVENLABS_API_KEY) if ELEVENLABS_API_KEY els
 
 def get_current_user(request: Request, db: Session):
     user_id = request.session.get("user_id")
-
     if not user_id:
         return None
-
     return db.query(User).filter(User.id == user_id).first()
 
 
 def require_user(request: Request, db: Session):
     user = get_current_user(request, db)
-
     if not user:
         raise HTTPException(status_code=401, detail="Usuário não autenticado")
-
     return user
 
 
@@ -98,18 +98,16 @@ def sort_tracks(tracks):
     )
 
 
-def get_next_review_date(review_stage: int):
+def get_next_review_date(stage: int):
     intervals = {
         1: 1,
         2: 3,
         3: 7,
         4: 14,
         5: 30,
-        6: 90,
+        6: 90
     }
-
-    days = intervals.get(review_stage, 120)
-
+    days = intervals.get(stage, 120)
     return datetime.utcnow() + timedelta(days=days)
 
 
@@ -151,7 +149,6 @@ def build_heatmap_data(progresses, days=90):
     for i in range(days):
         day = today - timedelta(days=(days - 1 - i))
         key = day.isoformat()
-
         result.append({
             "date": key,
             "count": counts.get(key, 0),
@@ -176,7 +173,6 @@ def home(request: Request, db: Session = Depends(get_db)):
         progresses = db.query(UserVerseProgress).filter(
             UserVerseProgress.user_id == current_user.id
         ).all()
-
         progresso = sum(1 for p in progresses if p.memorized)
 
     return templates.TemplateResponse(
@@ -188,7 +184,7 @@ def home(request: Request, db: Session = Depends(get_db)):
             "progresso": progresso,
             "tracks": tracks,
             "current_user": current_user,
-        },
+        }
     )
 
 
@@ -209,6 +205,7 @@ def register_page(request: Request, db: Session = Depends(get_db)):
             "request": request,
             "titulo": "Criar Conta",
             "erro": None,
+            "current_user": current_user,
         },
     )
 
@@ -230,12 +227,17 @@ def register_user(
                 "request": request,
                 "titulo": "Criar Conta",
                 "erro": "Já existe um usuário com esse e-mail.",
+                "current_user": None,
             },
         )
 
     hashed_password = pwd_context.hash(password)
 
-    user = User(name=name, email=email, password_hash=hashed_password)
+    user = User(
+        name=name,
+        email=email,
+        password_hash=hashed_password
+    )
 
     db.add(user)
     db.commit()
@@ -263,6 +265,7 @@ def login_page(request: Request, db: Session = Depends(get_db)):
             "request": request,
             "titulo": "Entrar",
             "erro": None,
+            "current_user": current_user,
         },
     )
 
@@ -283,6 +286,7 @@ def login_user(
                 "request": request,
                 "titulo": "Entrar",
                 "erro": "E-mail ou senha inválidos.",
+                "current_user": None,
             },
         )
 
@@ -318,7 +322,6 @@ def dashboard(request: Request, db: Session = Depends(get_db)):
 
     memorized_count = sum(1 for p in progresses if p.memorized)
     remaining_count = total_verses - memorized_count
-
     progress_map = {p.verse_id: p for p in progresses}
 
     now = datetime.utcnow()
@@ -379,7 +382,7 @@ def dashboard(request: Request, db: Session = Depends(get_db)):
 # --------------------------------------------------
 
 @app.get("/revisao", response_class=HTMLResponse)
-def revisao_page(request: Request, db: Session = Depends(get_db)):
+def revisao(request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
     now = datetime.utcnow()
 
@@ -406,11 +409,7 @@ def revisao_page(request: Request, db: Session = Depends(get_db)):
 
 
 @app.post("/revisao/{progress_id}/acertou")
-def acertou_revisao(
-    progress_id: int,
-    request: Request,
-    db: Session = Depends(get_db),
-):
+def acertou_revisao(progress_id: int, request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
 
     progress = db.query(UserVerseProgress).filter(
@@ -428,11 +427,7 @@ def acertou_revisao(
 
 
 @app.post("/revisao/{progress_id}/errou")
-def errou_revisao(
-    progress_id: int,
-    request: Request,
-    db: Session = Depends(get_db),
-):
+def errou_revisao(progress_id: int, request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
 
     progress = db.query(UserVerseProgress).filter(
@@ -450,13 +445,12 @@ def errou_revisao(
 
 
 # --------------------------------------------------
-# PÁGINAS NOVAS
+# PÁGINAS EXTRAS
 # --------------------------------------------------
 
 @app.get("/audio", response_class=HTMLResponse)
 def audio_page(request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
-
     verses = db.query(Verse).all()
 
     return templates.TemplateResponse(
@@ -539,115 +533,13 @@ def list_tracks(db: Session = Depends(get_db)):
 
     return JSONResponse(content=data, media_type="application/json; charset=utf-8")
 
-# --------------------------------------------------
-# MINHAS TRILHAS
-# --------------------------------------------------
 
-@app.get("/minhas-trilhas", response_class=HTMLResponse)
-def minhas_trilhas(request: Request, db: Session = Depends(get_db)):
-    user = require_user(request, db)
-
-    custom_tracks = db.query(CustomTrack).filter(
-        CustomTrack.user_id == user.id
-    ).all()
-
-    return templates.TemplateResponse(
-        "custom_tracks.html",
-        {
-            "request": request,
-            "titulo": "Minhas Trilhas",
-            "current_user": user,
-            "custom_tracks": custom_tracks,
-        },
-    )
-
-
-@app.get("/minhas-trilhas/nova", response_class=HTMLResponse)
-def nova_trilha_page(request: Request, db: Session = Depends(get_db)):
-    user = require_user(request, db)
-
-    verses = db.query(Verse).all()
-
-    return templates.TemplateResponse(
-        "custom_track_new.html",
-        {
-            "request": request,
-            "titulo": "Nova Trilha",
-            "current_user": user,
-            "verses": verses,
-        },
-    )
-
-
-@app.post("/minhas-trilhas/nova")
-def criar_trilha_personalizada(
-    request: Request,
-    title: str = Form(...),
-    description: str = Form(""),
-    verse_ids: list[int] = Form([]),
-    db: Session = Depends(get_db),
-):
-    user = require_user(request, db)
-
-    nova_trilha = CustomTrack(
-        user_id=user.id,
-        title=title,
-        description=description,
-    )
-
-    db.add(nova_trilha)
-    db.commit()
-    db.refresh(nova_trilha)
-
-    for index, verse_id in enumerate(verse_ids):
-        item = CustomTrackVerse(
-            custom_track_id=nova_trilha.id,
-            verse_id=verse_id,
-            order_index=index,
-        )
-        db.add(item)
-
-    db.commit()
-
-    return RedirectResponse(url="/minhas-trilhas", status_code=303)
-
-
-@app.get("/minhas-trilhas/{track_id}", response_class=HTMLResponse)
-def detalhe_trilha_personalizada(track_id: int, request: Request, db: Session = Depends(get_db)):
-    user = require_user(request, db)
-
-    custom_track = db.query(CustomTrack).filter(
-        CustomTrack.id == track_id,
-        CustomTrack.user_id == user.id
-    ).first()
-
-    if not custom_track:
-        raise HTTPException(status_code=404, detail="Trilha personalizada não encontrada")
-
-    progresses = db.query(UserVerseProgress).filter(
-        UserVerseProgress.user_id == user.id
-    ).all()
-    progress_map = {p.verse_id: p for p in progresses}
-
-    ordered_items = sorted(custom_track.verses, key=lambda x: x.order_index)
-
-    return templates.TemplateResponse(
-        "custom_track_detail.html",
-        {
-            "request": request,
-            "titulo": custom_track.title,
-            "current_user": user,
-            "custom_track": custom_track,
-            "track_verses": ordered_items,
-            "progress_map": progress_map,
-        },
-    )
 # --------------------------------------------------
 # TRILHAS
 # --------------------------------------------------
 
 @app.get("/trilhas", response_class=HTMLResponse)
-def trilhas_page(request: Request, db: Session = Depends(get_db)):
+def trilhas(request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
 
     tracks = sort_tracks(db.query(Track).all())
@@ -665,22 +557,24 @@ def trilhas_page(request: Request, db: Session = Depends(get_db)):
             "titulo": "Trilhas",
             "tracks": tracks,
             "progress_map": progress_map,
-            "current_user": user,
-        },
+            "current_user": user
+        }
     )
 
 
 @app.get("/trilha/{track_id}", response_class=HTMLResponse)
-def trilha_detalhe(track_id: int, request: Request, db: Session = Depends(get_db)):
+def trilha(track_id: int, request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
 
     track = db.query(Track).filter(Track.id == track_id).first()
+
     if not track:
         raise HTTPException(status_code=404, detail="Trilha não encontrada")
 
     progresses = db.query(UserVerseProgress).filter(
         UserVerseProgress.user_id == user.id
     ).all()
+
     progress_map = {p.verse_id: p for p in progresses}
 
     grouped_verses = None
@@ -717,7 +611,7 @@ def trilha_detalhe(track_id: int, request: Request, db: Session = Depends(get_db
             "progress_map": progress_map,
             "current_user": user,
             "grouped_verses": grouped_verses,
-        },
+        }
     )
 
 
@@ -726,10 +620,11 @@ def trilha_detalhe(track_id: int, request: Request, db: Session = Depends(get_db
 # --------------------------------------------------
 
 @app.get("/versiculo/{verse_id}", response_class=HTMLResponse)
-def versiculo_detalhe(verse_id: int, request: Request, db: Session = Depends(get_db)):
+def versiculo(verse_id: int, request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
 
     verse = db.query(Verse).filter(Verse.id == verse_id).first()
+
     if not verse:
         raise HTTPException(status_code=404, detail="Versículo não encontrado")
 
@@ -756,13 +651,54 @@ def versiculo_detalhe(verse_id: int, request: Request, db: Session = Depends(get
             "titulo": verse.reference,
             "verse": verse,
             "progress": progress,
-            "current_user": user,
-        },
+            "current_user": user
+        }
     )
 
 
+# --------------------------------------------------
+# MARCAR MEMORIZADO
+# --------------------------------------------------
+
+@app.post("/versiculo/{verse_id}/memorizar")
+def memorizar(verse_id: int, request: Request, db: Session = Depends(get_db)):
+    user = require_user(request, db)
+
+    progress = db.query(UserVerseProgress).filter(
+        UserVerseProgress.user_id == user.id,
+        UserVerseProgress.verse_id == verse_id
+    ).first()
+
+    if not progress:
+        progress = UserVerseProgress(
+            user_id=user.id,
+            verse_id=verse_id,
+            memorized=True,
+            review_stage=1,
+            last_reviewed_at=datetime.utcnow(),
+            next_review_date=get_next_review_date(1)
+        )
+        db.add(progress)
+    else:
+        progress.memorized = True
+        progress.review_stage = 1
+        progress.last_reviewed_at = datetime.utcnow()
+        progress.next_review_date = get_next_review_date(1)
+
+    db.commit()
+
+    return RedirectResponse(
+        url=f"/versiculo/{verse_id}",
+        status_code=303
+    )
+
+
+# --------------------------------------------------
+# AUDIO
+# --------------------------------------------------
+
 @app.get("/versiculo/{verse_id}/audio")
-def gerar_audio_versiculo(
+def gerar_audio(
     verse_id: int,
     request: Request,
     mode: str = "text_only",
@@ -774,70 +710,28 @@ def gerar_audio_versiculo(
         raise HTTPException(status_code=500, detail="ELEVENLABS_API_KEY não configurada")
 
     verse = db.query(Verse).filter(Verse.id == verse_id).first()
+
     if not verse:
         raise HTTPException(status_code=404, detail="Versículo não encontrado")
 
     if mode == "with_reference":
-        texto = f"{verse.reference}. {verse.text}"
+        text = f"{verse.reference}. {verse.text}"
     else:
-        texto = verse.text
+        text = verse.text
 
-    try:
-        audio_stream = eleven_client.text_to_speech.convert(
-            voice_id="JBFqnCBsd6RMkjVDRZzb",
-            model_id="eleven_multilingual_v2",
-            output_format="mp3_44100_128",
-            text=texto,
-        )
+    audio_stream = eleven_client.text_to_speech.convert(
+        voice_id="JBFqnCBsd6RMkjVDRZzb",
+        model_id="eleven_multilingual_v2",
+        output_format="mp3_44100_128",
+        text=text
+    )
 
-        audio_bytes = b"".join(audio_stream)
+    audio_bytes = b"".join(audio_stream)
 
-        if not audio_bytes:
-            raise HTTPException(status_code=500, detail="A API retornou áudio vazio")
-
-        return StreamingResponse(
-            BytesIO(audio_bytes),
-            media_type="audio/mpeg",
-            headers={"Content-Disposition": f'inline; filename="verse_{verse_id}.mp3"'},
-        )
-
-    except Exception as e:
-        print("ERRO ELEVENLABS:", repr(e))
-        raise HTTPException(status_code=500, detail=f"Erro ao gerar áudio: {str(e)}")
-
-
-@app.post("/versiculo/{verse_id}/memorizar")
-def marcar_memorizado(verse_id: int, request: Request, db: Session = Depends(get_db)):
-    user = require_user(request, db)
-
-    verse = db.query(Verse).filter(Verse.id == verse_id).first()
-    if not verse:
-        raise HTTPException(status_code=404, detail="Versículo não encontrado")
-
-    progress = db.query(UserVerseProgress).filter(
-        UserVerseProgress.user_id == user.id,
-        UserVerseProgress.verse_id == verse.id
-    ).first()
-
-    if not progress:
-        progress = UserVerseProgress(
-            user_id=user.id,
-            verse_id=verse.id,
-            memorized=True,
-            review_stage=1,
-            last_reviewed_at=datetime.utcnow(),
-            next_review_date=get_next_review_date(1),
-        )
-        db.add(progress)
-    else:
-        progress.memorized = True
-        progress.review_stage = 1
-        progress.last_reviewed_at = datetime.utcnow()
-        progress.next_review_date = get_next_review_date(1)
-
-    db.commit()
-
-    return RedirectResponse(url=f"/versiculo/{verse_id}", status_code=303)
+    return StreamingResponse(
+        BytesIO(audio_bytes),
+        media_type="audio/mpeg"
+    )
 
 
 # --------------------------------------------------
@@ -848,7 +742,7 @@ def marcar_memorizado(verse_id: int, request: Request, db: Session = Depends(get
 def minhas_trilhas(request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
 
-    custom_tracks = db.query(CustomTrack).filter(
+    tracks = db.query(CustomTrack).filter(
         CustomTrack.user_id == user.id
     ).all()
 
@@ -857,14 +751,14 @@ def minhas_trilhas(request: Request, db: Session = Depends(get_db)):
         {
             "request": request,
             "titulo": "Minhas Trilhas",
-            "current_user": user,
-            "custom_tracks": custom_tracks,
-        },
+            "custom_tracks": tracks,
+            "current_user": user
+        }
     )
 
 
 @app.get("/minhas-trilhas/nova", response_class=HTMLResponse)
-def nova_trilha_page(request: Request, db: Session = Depends(get_db)):
+def nova_trilha(request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
 
     verses = db.query(Verse).all()
@@ -874,72 +768,73 @@ def nova_trilha_page(request: Request, db: Session = Depends(get_db)):
         {
             "request": request,
             "titulo": "Nova Trilha",
-            "current_user": user,
             "verses": verses,
-        },
+            "current_user": user
+        }
     )
 
 
 @app.post("/minhas-trilhas/nova")
-def criar_trilha_personalizada(
+def criar_trilha(
     request: Request,
     title: str = Form(...),
     description: str = Form(""),
     verse_ids: list[int] = Form([]),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_db)
 ):
     user = require_user(request, db)
 
-    nova_trilha = CustomTrack(
+    track = CustomTrack(
         user_id=user.id,
         title=title,
-        description=description,
+        description=description
     )
 
-    db.add(nova_trilha)
+    db.add(track)
     db.commit()
-    db.refresh(nova_trilha)
+    db.refresh(track)
 
-    for index, verse_id in enumerate(verse_ids):
+    for i, vid in enumerate(verse_ids):
         item = CustomTrackVerse(
-            custom_track_id=nova_trilha.id,
-            verse_id=verse_id,
-            order_index=index,
+            custom_track_id=track.id,
+            verse_id=vid,
+            order_index=i
         )
         db.add(item)
 
     db.commit()
 
-    return RedirectResponse(url="/minhas-trilhas", status_code=303)
+    return RedirectResponse("/minhas-trilhas", status_code=303)
 
 
 @app.get("/minhas-trilhas/{track_id}", response_class=HTMLResponse)
-def detalhe_trilha_personalizada(track_id: int, request: Request, db: Session = Depends(get_db)):
+def trilha_personalizada(track_id: int, request: Request, db: Session = Depends(get_db)):
     user = require_user(request, db)
 
-    custom_track = db.query(CustomTrack).filter(
+    track = db.query(CustomTrack).filter(
         CustomTrack.id == track_id,
         CustomTrack.user_id == user.id
     ).first()
 
-    if not custom_track:
+    if not track:
         raise HTTPException(status_code=404, detail="Trilha personalizada não encontrada")
+
+    verses = sorted(track.verses, key=lambda v: v.order_index)
 
     progresses = db.query(UserVerseProgress).filter(
         UserVerseProgress.user_id == user.id
     ).all()
-    progress_map = {p.verse_id: p for p in progresses}
 
-    ordered_items = sorted(custom_track.verses, key=lambda x: x.order_index)
+    progress_map = {p.verse_id: p for p in progresses}
 
     return templates.TemplateResponse(
         "custom_track_detail.html",
         {
             "request": request,
-            "titulo": custom_track.title,
-            "current_user": user,
-            "custom_track": custom_track,
-            "track_verses": ordered_items,
+            "titulo": track.title,
+            "custom_track": track,
+            "track_verses": verses,
             "progress_map": progress_map,
-        },
+            "current_user": user
+        }
     )

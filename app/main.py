@@ -36,9 +36,11 @@ load_dotenv(BASE_DIR / ".env")
 
 app = FastAPI()
 
+SESSION_SECRET = os.getenv("SESSION_SECRET", "MemoBible-chave-secreta-mvp")
+
 app.add_middleware(
     SessionMiddleware,
-    secret_key="MemoBible-chave-secreta-mvp"
+    secret_key=SESSION_SECRET
 )
 
 Base.metadata.create_all(bind=engine)

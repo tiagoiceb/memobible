@@ -33,29 +33,27 @@
 </section>
 
 <script>
-function falarVersiculo() {
+function falarTexto(texto) {
+    window.speechSynthesis.cancel();
 
-window.speechSynthesis.cancel()
+    const fala = new SpeechSynthesisUtterance(texto);
+    const vozes = window.speechSynthesis.getVoices();
 
-const texto = document.getElementById("verseText").innerText
+    const vozBR = vozes.find(v => v.lang === "pt-BR") || vozes[0];
 
-const fala = new SpeechSynthesisUtterance(texto)
+    if (vozBR) {
+        fala.voice = vozBR;
+    }
 
-const vozes = speechSynthesis.getVoices()
+    fala.lang = "pt-BR";
+    fala.rate = 0.9;
+    fala.pitch = 0.9;
 
-const vozBR = vozes.find(v => 
-    v.lang === "pt-BR" && v.name.toLowerCase().includes("male")
-)
-
-if (vozBR) {
-    fala.voice = vozBR
+    window.speechSynthesis.speak(fala);
 }
 
-fala.lang = "pt-BR"
-fala.rate = 0.9
-fala.pitch = 0.9
-
-speechSynthesis.speak(fala)
+function pararAudio() {
+    window.speechSynthesis.cancel();
 }
 </script>
 

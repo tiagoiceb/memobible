@@ -45,6 +45,9 @@ class UserVerseProgress(Base):
     last_reviewed_at = Column(DateTime, nullable=True)
     next_review_date = Column(DateTime, nullable=True)
 
+    user = relationship("User")
+    verse = relationship("Verse")
+
 
 class CustomTrack(Base):
     __tablename__ = "custom_tracks"
